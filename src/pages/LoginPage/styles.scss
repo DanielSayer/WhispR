@@ -1,0 +1,18 @@
+@import "../../assets/colours";
+
+$default-card-border: 8px;
+
+.login-card {
+  width: 50vw;
+  height: calc(100vh - (2 * $default-card-border));
+  display: flex;
+}
+
+.login-information {
+  display: inherit;
+  flex-direction: column;
+  gap: 1rem;
+  justify-content: center;
+  align-items: center;
+  width: inherit;
+}
