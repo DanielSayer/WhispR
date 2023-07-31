@@ -1,14 +1,14 @@
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom"
 import AppRoutes from "./appRoutes"
-import LoginPage from "./pages/LoginPage"
+import SignUpPage from "./pages/LoginPage"
 
 const App: React.FC = (): React.ReactElement => {
-  const { loginPage } = AppRoutes
+  const { loginPage, signUpPage } = AppRoutes
 
   return (
     <BrowserRouter basename="/whispr">
       <Routes>
-        <Route path={loginPage} element={<LoginPage />} />
+        <Route path={signUpPage} element={<SignUpPage />} />
 
         <Route
           path={"*"}
