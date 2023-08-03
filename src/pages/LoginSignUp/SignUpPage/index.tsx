@@ -1,3 +1,5 @@
+import { zodResolver } from "@hookform/resolvers/zod"
+import { Visibility, VisibilityOff } from "@mui/icons-material"
 import {
   Button,
   Card,
@@ -8,17 +10,15 @@ import {
   TextField,
   Typography,
 } from "@mui/material"
-import { Visibility, VisibilityOff } from "@mui/icons-material"
+import { useState } from "react"
 import { useForm } from "react-hook-form"
-import { zodResolver } from "@hookform/resolvers/zod"
+import { useNavigate } from "react-router-dom"
+import AppRoutes from "../../../appRoutes"
 import {
   SignUpInformation,
   SignUpValidator,
-} from "../../utils/validators/SignupValidator"
-import "./styles.scss"
-import { useState } from "react"
-import { useNavigate } from "react-router-dom"
-import AppRoutes from "../../appRoutes"
+} from "../../../utils/validators/SignupValidator"
+import "../styles.scss"
 
 interface IPasswordVisibilities {
   password: boolean
@@ -56,14 +56,28 @@ const SignUpPage: React.FC = (): React.ReactElement => {
   return (
     <Card className="login-card">
       <CardContent className="login-information">
-        {/* <Typography component={"div"} variant="h5">
-          Sign
-        </Typography> */}
+        <Typography
+          className="w-75"
+          component={"div"}
+          variant="h5"
+          sx={{ fontWeight: "bold" }}
+        >
+          Create account
+        </Typography>
         <TextField
           label="Username"
+          color="primary"
           error={errors.username !== undefined}
           helperText={errors.username?.message}
           {...register("username")}
+          className="w-75"
+        />
+        <TextField
+          label="Email"
+          color="primary"
+          error={errors.email !== undefined}
+          helperText={errors.email?.message}
+          {...register("email")}
           className="w-75"
         />
         <TextField
@@ -112,15 +126,17 @@ const SignUpPage: React.FC = (): React.ReactElement => {
         />
 
         <Button
-          className="w-50 pill bg-primary"
+          className="w-50 pill"
           variant="contained"
+          color="primary"
           onClick={handleSubmit(onSubmit)}
         >
           JOIN NOW
         </Button>
         <Typography variant="caption">
-          Already have an account?{" "}
+          Already have an account?
           <Link
+            className="ms-2"
             component="button"
             onClick={() => navigate(AppRoutes.loginPage)}
             color="inherit"

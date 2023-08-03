@@ -8,6 +8,7 @@ export const SignUpValidator = z
       .string()
       .min(3, { message: "Username must be at least 3 characters long" })
       .max(20, { message: "Username cannot exceed 20 characters" }),
+    email: z.string().email(),
     password: z
       .string()
       .min(3, { message: "Password must be at least 3 characters long" }),
