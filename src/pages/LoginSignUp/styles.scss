@@ -6,6 +6,7 @@ $default-card-border: 8px;
   width: 50vw;
   min-width: 350px;
   max-width: 500px;
+  margin: $default-card-border;
   height: calc(100vh - (2 * $default-card-border));
   display: flex;
 }

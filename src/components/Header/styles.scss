@@ -1,14 +1,11 @@
 @import "../../assets/theme.scss";
 
 .header {
-  position: absolute;
   display: flex;
-  top: 0;
-  left: 0;
   width: 100%;
   height: 10%;
   max-height: 65px;
-  min-height: 40px;
+  min-height: 50px;
   background-color: $raisin-black;
   align-items: center;
 }

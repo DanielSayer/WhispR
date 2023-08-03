@@ -1,4 +1,3 @@
-import { Apps } from "@mui/icons-material"
 import { Avatar } from "@mui/material"
 import { default as Logo } from "../../assets/images/whisprLogo.png"
 import { stringAvatar } from "../../utils/helperMethods/generateAvatar"
@@ -9,7 +8,6 @@ const Header: React.FC = (): React.ReactElement => {
     <div className="header">
       <img draggable={false} className="logo" src={Logo} />
       <div className="menu">
-        <Apps />
         <Avatar {...stringAvatar("Daniel Sayer")} />
       </div>
     </div>
