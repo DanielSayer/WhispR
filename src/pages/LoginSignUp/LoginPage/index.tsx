@@ -36,8 +36,9 @@ const LoginPage: React.FC = (): React.ReactElement => {
   }
 
   const onSubmit = (data: LoginInformation) => {
-    window.alert("YOURE IN")
+    navigate(AppRoutes.getHomePage())
   }
+
   return (
     <Card className="login-card">
       <CardContent className="login-information">

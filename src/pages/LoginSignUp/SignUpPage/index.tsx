@@ -50,7 +50,7 @@ const SignUpPage: React.FC = (): React.ReactElement => {
   }
 
   const onSubmit = (data: SignUpInformation) => {
-    window.alert("YOURE IN")
+    navigate(AppRoutes.getHomePage())
   }
 
   return (

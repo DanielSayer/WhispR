@@ -4,6 +4,8 @@ $default-card-border: 8px;
 
 .login-card {
   width: 50vw;
+  min-width: 350px;
+  max-width: 500px;
   height: calc(100vh - (2 * $default-card-border));
   display: flex;
 }
@@ -14,5 +16,5 @@ $default-card-border: 8px;
   gap: 1rem;
   justify-content: center;
   align-items: center;
-  width: inherit;
+  width: 100%;
 }
