@@ -1,0 +1,11 @@
+.name-block {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.user-info {
+  display: flex;
+  flex-direction: column;
+  line-height: 1;
+  justify-content: end;
+}

@@ -18,7 +18,7 @@ const RecentChat: React.FC<IRecentChatProps> = ({
         <Typography variant="subtitle2" color="primary">
           {name}
         </Typography>
-        <Typography variant="caption" color="primary">
+        <Typography variant="caption" color="primary" sx={{ opacity: 0.8 }}>
           {mostRecentMessage}
         </Typography>
       </div>

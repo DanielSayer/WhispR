@@ -6,6 +6,7 @@ import { useState } from "react"
 
 const SideMenu: React.FC = (): React.ReactElement => {
   const data = [
+    { name: "Fin", message: "❤️😘" },
     { name: "Jared Sexy", message: "Hello" },
     { name: "Maxy Taxy", message: "Waddup" },
     { name: "Jonny Boi", message: "Gangser" },
@@ -23,7 +24,7 @@ const SideMenu: React.FC = (): React.ReactElement => {
         id="Search"
         placeholder="Search"
         size="small"
-        className="mb-2"
+        className="mb-2 w-100"
         value={search}
         onChange={(e) => setSearch(e.currentTarget.value)}
         endAdornment={
