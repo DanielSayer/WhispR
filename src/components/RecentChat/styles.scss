@@ -1,0 +1,17 @@
+@import "../../assets/theme.scss";
+
+.chat-container {
+  display: flex;
+  padding-inline: 0.5rem;
+  padding-block: 0.25rem;
+
+  .content {
+    margin-left: 0.5rem;
+    display: flex;
+    flex-direction: column;
+  }
+}
+
+.chat-container:hover {
+  background-color: $silver;
+}
