@@ -1,6 +1,8 @@
 .name-block {
   display: flex;
   gap: 0.5rem;
+  max-height: 50px;
+  min-width: fit-content;
 }
 
 .user-info {
