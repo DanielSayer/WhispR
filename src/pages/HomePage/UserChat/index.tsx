@@ -11,6 +11,7 @@ import {
 } from "@mui/icons-material"
 import { OutlinedInput } from "@mui/material"
 import { useState } from "react"
+import ChatMessage from "../../../components/ChatMessages"
 
 const UserChat: React.FC = (): React.ReactElement => {
   const [message, setMessage] = useState<string>("")
@@ -27,6 +28,16 @@ const UserChat: React.FC = (): React.ReactElement => {
           <MoreHoriz />
         </div>
       </div>
+      <div className="chat-area">
+        <ChatMessage />
+        <ChatMessage />
+        <ChatMessage />
+        <ChatMessage />
+        <ChatMessage />
+        <ChatMessage />
+        <ChatMessage />
+      </div>
+
       <div className="send-bar">
         <AttachFile />
         <OutlinedInput

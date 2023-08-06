@@ -5,3 +5,12 @@
   background-color: white;
   padding: 0.5rem;
 }
+
+.friends {
+  overflow-y: auto;
+  height: calc(100vh - 120px);
+}
+
+.friends::-webkit-scrollbar {
+  display: none;
+}

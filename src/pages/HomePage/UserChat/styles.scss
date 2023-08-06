@@ -3,13 +3,11 @@
 .chat-panel {
   display: flex;
   flex-direction: column;
-  flex: 1;
+  height: calc(100vh - 50px);
 }
 
 .chat-header {
-  height: 10%;
-  min-height: 50px;
-  max-height: 65px;
+  height: 65px;
   background-color: $french-grey;
   display: flex;
   align-items: center;
@@ -36,12 +34,18 @@
   }
 }
 
+.chat-area {
+  display: flex;
+  flex-direction: column-reverse;
+  height: 100%;
+  overflow-y: auto;
+}
+
 .send-bar {
   display: flex;
   padding: 0.5rem;
   align-items: center;
   justify-content: space-between;
-  margin-top: auto;
   padding-inline: 1rem;
 
   svg {

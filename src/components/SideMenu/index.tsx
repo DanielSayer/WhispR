@@ -12,6 +12,19 @@ const SideMenu: React.FC = (): React.ReactElement => {
     { name: "Jonny Boi", message: "Gangser" },
     { name: "Max JM", message: "A hit" },
     { name: "Jo Jo Panini", message: "Ur pretty" },
+    { name: "Jo Jo Panini", message: "Ur pretty" },
+    { name: "Jo Jo Panini", message: "Ur pretty" },
+    { name: "Jo Jo Panini", message: "Ur pretty" },
+    { name: "Jo Jo Panini", message: "Ur pretty" },
+    { name: "Jo Jo Panini", message: "Ur pretty" },
+    { name: "Jo Jo Panini", message: "Ur pretty" },
+    { name: "Jo Jo Panini", message: "Ur pretty" },
+    { name: "Jo Jo Panini", message: "Ur pretty" },
+    { name: "Jo Jo Panini", message: "Ur pretty" },
+    { name: "Jo Jo Panini", message: "Ur pretty" },
+    { name: "Jo Jo Panini", message: "Ur pretty" },
+    { name: "Jo Jo Panini", message: "Ur pretty" },
+    { name: "Jo Jo Panini", message: "Ur pretty" },
   ]
   const [search, setSearch] = useState<string>("")
   const filteredData = data.filter((x) =>
@@ -33,27 +46,29 @@ const SideMenu: React.FC = (): React.ReactElement => {
           </InputAdornment>
         }
       />
-      <div style={{ display: "grid", gap: "0.25rem" }}>
-        {filteredData.length > 0 ? (
-          filteredData.map((a) => (
-            <RecentChat name={a.name} mostRecentMessage={a.message} />
-          ))
-        ) : (
-          <div
-            style={{
-              opacity: 0.5,
-              display: "flex",
-              marginTop: "1rem",
-              flexDirection: "column",
-              alignItems: "center",
-            }}
-          >
-            <Typography variant="subtitle1" color="primary">
-              Looks like you have no friends
-            </Typography>
-            <SentimentDissatisfied />
-          </div>
-        )}
+      <div className="friends">
+        <div style={{ display: "grid", gap: "0.25rem" }}>
+          {filteredData.length > 0 ? (
+            filteredData.map((a) => (
+              <RecentChat name={a.name} mostRecentMessage={a.message} />
+            ))
+          ) : (
+            <div
+              style={{
+                opacity: 0.5,
+                display: "flex",
+                marginTop: "1rem",
+                flexDirection: "column",
+                alignItems: "center",
+              }}
+            >
+              <Typography variant="subtitle1" color="primary">
+                Looks like you have no friends
+              </Typography>
+              <SentimentDissatisfied />
+            </div>
+          )}
+        </div>
       </div>
     </div>
   )

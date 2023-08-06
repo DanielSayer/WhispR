@@ -1,0 +1,30 @@
+.message {
+  display: flex;
+  max-width: 60%;
+  padding-block: 0.5rem;
+  padding-inline: 1rem;
+  align-items: center;
+}
+
+.message-info {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  justify-items: center;
+  min-width: fit-content;
+  margin-right: 1rem;
+
+  p {
+    opacity: 0.7;
+    font-size: small;
+  }
+}
+
+.message-content {
+  display: flex;
+  background-color: #fff;
+  padding-block: 0.4rem;
+  padding-inline: 0.75rem;
+  border-radius: 1rem 1rem 1rem 0;
+  box-shadow: 0 0 5px #808080;
+}
