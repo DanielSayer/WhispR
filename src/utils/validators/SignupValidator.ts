@@ -11,7 +11,7 @@ export const SignUpValidator = z
     email: z.string().email(),
     password: z
       .string()
-      .min(3, { message: "Password must be at least 3 characters long" }),
+      .min(6, { message: "Password must be at least 6 characters long" }),
     passwordVerification: z.string(),
   })
   .refine((data) => data.password === data.passwordVerification, {

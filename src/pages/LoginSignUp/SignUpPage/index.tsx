@@ -10,10 +10,14 @@ import {
   TextField,
   Typography,
 } from "@mui/material"
+import { FirebaseError } from "firebase/app"
+import { createUserWithEmailAndPassword } from "firebase/auth"
 import { useState } from "react"
 import { useForm } from "react-hook-form"
 import { useNavigate } from "react-router-dom"
 import AppRoutes from "../../../appRoutes"
+import { auth } from "../../../firebase"
+import { getErrorMessageFromCode } from "../../../utils/firebase/errorCodeMapping"
 import {
   SignUpInformation,
   SignUpValidator,
@@ -33,6 +37,7 @@ const SignUpPage: React.FC = (): React.ReactElement => {
   } = useForm<SignUpInformation>({ resolver: zodResolver(SignUpValidator) })
 
   const navigate = useNavigate()
+  const [authError, setAuthError] = useState<string>("")
   const [showPasswords, setShowPasswords] = useState<IPasswordVisibilities>({
     password: false,
     confirm: false,
@@ -49,8 +54,18 @@ const SignUpPage: React.FC = (): React.ReactElement => {
     event.preventDefault()
   }
 
-  const onSubmit = (data: SignUpInformation) => {
-    navigate(AppRoutes.getHomePage())
+  const onSubmit = async (data: SignUpInformation) => {
+    try {
+      const response = await createUserWithEmailAndPassword(
+        auth,
+        data.email,
+        data.password
+      )
+    } catch (error) {
+      if (error instanceof FirebaseError) {
+        setAuthError(getErrorMessageFromCode(error.code))
+      }
+    }
   }
 
   return (
@@ -124,6 +139,12 @@ const SignUpPage: React.FC = (): React.ReactElement => {
             ),
           }}
         />
+
+        {authError && (
+          <Typography color="error" variant="caption">
+            {authError}
+          </Typography>
+        )}
 
         <Button
           className="w-50 pill"
