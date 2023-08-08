@@ -1,23 +1,28 @@
 import { zodResolver } from "@hookform/resolvers/zod"
+import { Visibility, VisibilityOff } from "@mui/icons-material"
 import {
   Button,
   Card,
   CardContent,
+  CircularProgress,
   IconButton,
   InputAdornment,
   Link,
   TextField,
   Typography,
 } from "@mui/material"
+import { FirebaseError } from "firebase/app"
+import { signInWithEmailAndPassword } from "firebase/auth"
 import { useState } from "react"
 import { useForm } from "react-hook-form"
 import { useNavigate } from "react-router-dom"
 import AppRoutes from "../../../appRoutes"
+import { auth } from "../../../firebase"
+import { getErrorMessageFromCode } from "../../../utils/firebase/errorCodeMapping"
 import {
   LoginInformation,
   LoginValidator,
 } from "../../../utils/validators/LoginValidator"
-import { Visibility, VisibilityOff } from "@mui/icons-material"
 
 const LoginPage: React.FC = (): React.ReactElement => {
   const { register, handleSubmit } = useForm<LoginInformation>({
@@ -26,6 +31,8 @@ const LoginPage: React.FC = (): React.ReactElement => {
 
   const navigate = useNavigate()
   const [showPassword, setShowPassword] = useState<boolean>(false)
+  const [authError, setAuthError] = useState<string>("")
+  const [isLoading, setIsLoading] = useState<boolean>(false)
 
   const handleClickShowPassword = () => setShowPassword((show) => !show)
 
@@ -35,8 +42,18 @@ const LoginPage: React.FC = (): React.ReactElement => {
     event.preventDefault()
   }
 
-  const onSubmit = (data: LoginInformation) => {
-    navigate(AppRoutes.getHomePage())
+  const onSubmit = async (data: LoginInformation) => {
+    setIsLoading(true)
+    try {
+      await signInWithEmailAndPassword(auth, data.email, data.password)
+      navigate(AppRoutes.getHomePage())
+    } catch (error) {
+      if (error instanceof FirebaseError) {
+        setAuthError(getErrorMessageFromCode(error.code))
+      }
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   return (
@@ -51,9 +68,9 @@ const LoginPage: React.FC = (): React.ReactElement => {
           Login
         </Typography>
         <TextField
-          label="Username"
+          label="Email"
           color="primary"
-          {...register("username")}
+          {...register("email")}
           className="w-75"
         />
 
@@ -78,13 +95,19 @@ const LoginPage: React.FC = (): React.ReactElement => {
           }}
         />
 
+        {authError && (
+          <Typography color="error" variant="caption">
+            {authError}
+          </Typography>
+        )}
+
         <Button
           className="w-50 pill"
           variant="contained"
           color="primary"
           onClick={handleSubmit(onSubmit)}
         >
-          LOGIN
+          {isLoading ? <CircularProgress size={25} color="inherit" /> : "LOGIN"}
         </Button>
         <Typography variant="caption">
           Need an account?
