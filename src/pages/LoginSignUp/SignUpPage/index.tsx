@@ -4,6 +4,7 @@ import {
   Button,
   Card,
   CardContent,
+  CircularProgress,
   IconButton,
   InputAdornment,
   Link,
@@ -11,12 +12,13 @@ import {
   Typography,
 } from "@mui/material"
 import { FirebaseError } from "firebase/app"
-import { createUserWithEmailAndPassword } from "firebase/auth"
+import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth"
+import { doc, setDoc } from "firebase/firestore"
 import { useState } from "react"
 import { useForm } from "react-hook-form"
 import { useNavigate } from "react-router-dom"
 import AppRoutes from "../../../appRoutes"
-import { auth } from "../../../firebase"
+import { auth, db } from "../../../firebase"
 import { getErrorMessageFromCode } from "../../../utils/firebase/errorCodeMapping"
 import {
   SignUpInformation,
@@ -30,13 +32,13 @@ interface IPasswordVisibilities {
 }
 
 const SignUpPage: React.FC = (): React.ReactElement => {
+  const navigate = useNavigate()
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<SignUpInformation>({ resolver: zodResolver(SignUpValidator) })
-
-  const navigate = useNavigate()
+  const [isLoading, setIsLoading] = useState<boolean>(false)
   const [authError, setAuthError] = useState<string>("")
   const [showPasswords, setShowPasswords] = useState<IPasswordVisibilities>({
     password: false,
@@ -55,16 +57,28 @@ const SignUpPage: React.FC = (): React.ReactElement => {
   }
 
   const onSubmit = async (data: SignUpInformation) => {
+    setIsLoading(true)
     try {
       const response = await createUserWithEmailAndPassword(
         auth,
         data.email,
         data.password
       )
+      await updateProfile(response.user, { displayName: data.username })
+      await setDoc(doc(db, "users", response.user.uid), {
+        userId: response.user.uid,
+        userName: data.username,
+        email: data.email,
+      })
+      await setDoc(doc(db, "chats", response.user.uid), {})
+
+      navigate(AppRoutes.getHomePage())
     } catch (error) {
       if (error instanceof FirebaseError) {
         setAuthError(getErrorMessageFromCode(error.code))
       }
+    } finally {
+      setIsLoading(false)
     }
   }
 
@@ -152,7 +166,11 @@ const SignUpPage: React.FC = (): React.ReactElement => {
           color="primary"
           onClick={handleSubmit(onSubmit)}
         >
-          JOIN NOW
+          {isLoading ? (
+            <CircularProgress size={25} color="inherit" />
+          ) : (
+            "JOIN NOW"
+          )}
         </Button>
         <Typography variant="caption">
           Already have an account?
