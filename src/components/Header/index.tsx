@@ -6,7 +6,11 @@ import { Logout } from "@mui/icons-material"
 import { signOut } from "firebase/auth"
 import { auth } from "../../firebase"
 
-const Header: React.FC = (): React.ReactElement => {
+interface IHeaderProps {
+  name: string
+}
+
+const Header: React.FC<IHeaderProps> = ({ name }): React.ReactElement => {
   const handleSignOut = () => {
     signOut(auth)
   }
@@ -18,7 +22,7 @@ const Header: React.FC = (): React.ReactElement => {
         <div onClick={handleSignOut}>
           <Logout className="icon" />
         </div>
-        <Avatar {...stringAvatar("Daniel Sayer")} />
+        <Avatar {...stringAvatar(name)} />
       </div>
     </div>
   )

@@ -10,6 +10,7 @@ const errorCodeToMessageMap: ErrorCodeToMessageMap = {
   "auth/email-already-in-use":
     "The provided email is already in use by another account.",
   "auth/invalid-email": "The provided email is not a valid email address.",
+  "auth/user-not-found": "The email or password is incorrect.",
   "auth/wrong-password": "The email or password is incorrect.",
   "auth/invalid-phone-number": "The provided phone number is not valid.",
   "auth/invalid-sender": "The sender's information is not valid.",

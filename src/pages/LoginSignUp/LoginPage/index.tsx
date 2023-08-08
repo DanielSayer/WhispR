@@ -25,7 +25,11 @@ import {
 } from "../../../utils/validators/LoginValidator"
 
 const LoginPage: React.FC = (): React.ReactElement => {
-  const { register, handleSubmit } = useForm<LoginInformation>({
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<LoginInformation>({
     resolver: zodResolver(LoginValidator),
   })
 
@@ -72,6 +76,7 @@ const LoginPage: React.FC = (): React.ReactElement => {
           color="primary"
           {...register("email")}
           className="w-75"
+          error={errors.email !== undefined}
         />
 
         <TextField
