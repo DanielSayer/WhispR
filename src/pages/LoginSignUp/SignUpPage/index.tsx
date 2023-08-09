@@ -70,7 +70,7 @@ const SignUpPage: React.FC = (): React.ReactElement => {
         userName: data.username,
         email: data.email,
       })
-      await setDoc(doc(db, "chats", response.user.uid), {})
+      await setDoc(doc(db, "chatHistory", response.user.uid), {})
 
       navigate(AppRoutes.getHomePage())
     } catch (error) {

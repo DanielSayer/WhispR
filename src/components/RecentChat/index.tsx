@@ -3,16 +3,20 @@ import { stringAvatar } from "../../utils/helperMethods/generateAvatar"
 import "./styles.scss"
 
 interface IRecentChatProps {
+  id: string
   name: string
   mostRecentMessage: string
+  onClick: (id: string, username: string) => void
 }
 
 const RecentChat: React.FC<IRecentChatProps> = ({
+  id,
   name,
   mostRecentMessage,
+  onClick,
 }): React.ReactElement => {
   return (
-    <div className="chat-container">
+    <div key={id} className="chat-container" onClick={() => onClick(id, name)}>
       <Avatar {...stringAvatar(name)} />
       <div className="content">
         <Typography variant="subtitle2" color="primary">
