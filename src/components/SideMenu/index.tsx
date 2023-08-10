@@ -83,6 +83,15 @@ const SideMenu: React.FC = (): React.ReactElement => {
   }
 
   const handleSelectUser = async (id: string, username: string) => {
+    const chatUserLocation = chatHistory.findIndex((c) => c.id === id)
+    if (chatUserLocation === -1) return
+    const updatedHistory = [
+      chatHistory[chatUserLocation],
+      ...chatHistory.slice(0, chatUserLocation),
+      ...chatHistory.slice(chatUserLocation + 1),
+    ]
+    setChatHistory(updatedHistory)
+
     const userDocRef = doc(db, "chatHistory", user!.uid)
     const conversationDocRef = doc(userDocRef, "recentConversations", id)
     await setDoc(conversationDocRef, {
@@ -92,8 +101,6 @@ const SideMenu: React.FC = (): React.ReactElement => {
       hasSeen: true,
       timestamp: Date.now(),
     } as IChatHistory)
-
-    //find in array push to front
   }
 
   return (
