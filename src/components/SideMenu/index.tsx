@@ -9,7 +9,6 @@ import {
 import {
   collection,
   doc,
-  getDoc,
   getDocs,
   query,
   setDoc,
@@ -26,6 +25,7 @@ interface IChatHistory {
   username: string
   lastMessage: string
   hasSeen: boolean
+  timestamp: number
 }
 
 const SideMenu: React.FC = (): React.ReactElement => {
@@ -35,7 +35,24 @@ const SideMenu: React.FC = (): React.ReactElement => {
 
   useEffect(() => {
     const loadUserChatHistory = async () => {
-      const response = await getDoc(doc(db, "chatHistory", user!.uid))
+      let previousUserHistory: IChatHistory[] = []
+      const userDocRef = doc(db, "chatHistory", user!.uid)
+      const converstationCollectionRef = collection(
+        userDocRef,
+        "recentConversations"
+      )
+      const response = await getDocs(converstationCollectionRef)
+      response.forEach((u) =>
+        previousUserHistory.push({
+          id: u.get("id"),
+          lastMessage: u.get("lastMessage"),
+          hasSeen: u.get("hasSeen"),
+          username: u.get("username"),
+          timestamp: u.get("timestamp"),
+        })
+      )
+      previousUserHistory.sort((a, b) => b.timestamp - a.timestamp)
+      setChatHistory(previousUserHistory)
     }
     if (!user) return
     loadUserChatHistory()
@@ -58,6 +75,7 @@ const SideMenu: React.FC = (): React.ReactElement => {
           lastMessage: "",
           hasSeen: false,
           username: p.get("userName"),
+          timestamp: Date.now(),
         },
       ])
     )
@@ -65,18 +83,17 @@ const SideMenu: React.FC = (): React.ReactElement => {
   }
 
   const handleSelectUser = async (id: string, username: string) => {
-    const docRef = doc(db, "chatHistory", id)
-    const docSnap = await getDoc(docRef)
+    const userDocRef = doc(db, "chatHistory", user!.uid)
+    const conversationDocRef = doc(userDocRef, "recentConversations", id)
+    await setDoc(conversationDocRef, {
+      id: id,
+      username: username,
+      lastMessage: "",
+      hasSeen: true,
+      timestamp: Date.now(),
+    } as IChatHistory)
 
-    if (!docSnap.exists()) {
-      const historyRef = collection(db, "chatHistory")
-      await setDoc(doc(historyRef, id), {
-        id: id,
-        username: username,
-        lastMessage: "",
-        hasSeen: true,
-      } as IChatHistory)
-    }
+    //find in array push to front
   }
 
   return (
