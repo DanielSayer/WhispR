@@ -9,13 +9,16 @@ import App from "./App.tsx"
 import { theme } from "./assets/_muiTheme.ts"
 import "./assets/theme.scss"
 import { AuthenticationContextProvider } from "./context/authenticationContext.tsx"
+import { ChatContextProvider } from "./context/chatContext/chatContext.tsx"
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <AuthenticationContextProvider>
-    <React.StrictMode>
-      <ThemeProvider theme={theme}>
-        <App />
-      </ThemeProvider>
-    </React.StrictMode>
+    <ChatContextProvider>
+      <React.StrictMode>
+        <ThemeProvider theme={theme}>
+          <App />
+        </ThemeProvider>
+      </React.StrictMode>
+    </ChatContextProvider>
   </AuthenticationContextProvider>
 )

@@ -9,6 +9,7 @@ import {
 import {
   collection,
   doc,
+  getDoc,
   getDocs,
   query,
   setDoc,
@@ -16,7 +17,9 @@ import {
 } from "firebase/firestore"
 import { useContext, useEffect, useState } from "react"
 import { AuthenticationContext } from "../../context/authenticationContext"
+import { ChatContext } from "../../context/chatContext/chatContext"
 import { db } from "../../firebase"
+import { generateCombinedId } from "../../utils/helperMethods/generateId"
 import RecentChat from "../RecentChat"
 import "./styles.scss"
 
@@ -30,6 +33,7 @@ interface IChatHistory {
 
 const SideMenu: React.FC = (): React.ReactElement => {
   const { user } = useContext(AuthenticationContext)
+  const { dispatch } = useContext(ChatContext)
   const [chatHistory, setChatHistory] = useState<IChatHistory[]>([])
   const [isLoading, setIsLoading] = useState<boolean>(false)
 
@@ -82,6 +86,7 @@ const SideMenu: React.FC = (): React.ReactElement => {
     setIsLoading(false)
   }
 
+  //This might need to be changed. So that the timestamp is created on message send rather than user clicked
   const handleSelectUser = async (id: string, username: string) => {
     const chatUserLocation = chatHistory.findIndex((c) => c.id === id)
     if (chatUserLocation === -1) return
@@ -91,6 +96,14 @@ const SideMenu: React.FC = (): React.ReactElement => {
       ...chatHistory.slice(chatUserLocation + 1),
     ]
     setChatHistory(updatedHistory)
+    dispatch({ type: "CHANGE_USER", payload: { id: id, username: username } })
+
+    const conversationId = generateCombinedId(user?.uid!, id)
+
+    const response = await getDoc(doc(db, "conversations", conversationId))
+    if (!response.exists()) {
+      await setDoc(doc(db, "conversations", conversationId), { messages: [] })
+    }
 
     const userDocRef = doc(db, "chatHistory", user!.uid)
     const conversationDocRef = doc(userDocRef, "recentConversations", id)
@@ -123,6 +136,7 @@ const SideMenu: React.FC = (): React.ReactElement => {
           {filteredData.length > 0 ? (
             filteredData.map((a) => (
               <RecentChat
+                key={a.id}
                 id={a.id}
                 name={a.username}
                 mostRecentMessage={a.lastMessage}
