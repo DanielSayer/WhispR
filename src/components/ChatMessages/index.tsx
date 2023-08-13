@@ -2,7 +2,13 @@ import { Avatar, Typography } from "@mui/material"
 import { stringAvatar } from "../../utils/helperMethods/generateAvatar"
 import "./styles.scss"
 
-const ChatMessage: React.FC = ({}): React.ReactElement => {
+interface IMessageProps {
+  message: string
+}
+
+const ChatMessage: React.FC<IMessageProps> = ({
+  message,
+}): React.ReactElement => {
   return (
     <div className="message">
       <div className="message-info">
@@ -10,8 +16,7 @@ const ChatMessage: React.FC = ({}): React.ReactElement => {
         <Typography component="p">just now</Typography>
       </div>
       <Typography className="message-content" variant="body2">
-        Hello, how are you today this is intentionally a longer message so I can
-        experiment with wrapping etc
+        {message}
       </Typography>
     </div>
   )

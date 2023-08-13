@@ -13,17 +13,18 @@ import {
   getDocs,
   query,
   setDoc,
+  updateDoc,
   where,
 } from "firebase/firestore"
 import { useContext, useEffect, useState } from "react"
 import { AuthenticationContext } from "../../context/authenticationContext"
-import { ChatContext } from "../../context/chatContext/chatContext"
 import { db } from "../../firebase"
-import { generateCombinedId } from "../../utils/helperMethods/generateId"
 import RecentChat from "../RecentChat"
 import "./styles.scss"
+import { ChatContext } from "../../context/chatContext/chatContext"
+import { generateCombinedId } from "../../utils/helperMethods/generateId"
 
-interface IChatHistory {
+export interface IChatHistory {
   id: string
   username: string
   lastMessage: string
@@ -41,20 +42,14 @@ const SideMenu: React.FC = (): React.ReactElement => {
     const loadUserChatHistory = async () => {
       let previousUserHistory: IChatHistory[] = []
       const userDocRef = doc(db, "chatHistory", user!.uid)
-      const converstationCollectionRef = collection(
-        userDocRef,
-        "recentConversations"
-      )
-      const response = await getDocs(converstationCollectionRef)
-      response.forEach((u) =>
-        previousUserHistory.push({
-          id: u.get("id"),
-          lastMessage: u.get("lastMessage"),
-          hasSeen: u.get("hasSeen"),
-          username: u.get("username"),
-          timestamp: u.get("timestamp"),
-        })
-      )
+      const response = await getDoc(userDocRef)
+      if (!response.exists()) return
+      const data: Record<string, IChatHistory> = response.data()
+      Object.keys(data).forEach((id) => {
+        const chatHistory: IChatHistory = data[id]
+        previousUserHistory.push(chatHistory)
+      })
+
       previousUserHistory.sort((a, b) => b.timestamp - a.timestamp)
       setChatHistory(previousUserHistory)
     }
@@ -103,17 +98,18 @@ const SideMenu: React.FC = (): React.ReactElement => {
     const response = await getDoc(doc(db, "conversations", conversationId))
     if (!response.exists()) {
       await setDoc(doc(db, "conversations", conversationId), { messages: [] })
-    }
 
-    const userDocRef = doc(db, "chatHistory", user!.uid)
-    const conversationDocRef = doc(userDocRef, "recentConversations", id)
-    await setDoc(conversationDocRef, {
-      id: id,
-      username: username,
-      lastMessage: "",
-      hasSeen: true,
-      timestamp: Date.now(),
-    } as IChatHistory)
+      const userDocRef = doc(db, "chatHistory", user!.uid)
+      await updateDoc(userDocRef, {
+        [conversationId]: {
+          id: id,
+          username: username,
+          lastMessage: "",
+          hasSeen: true,
+          timestamp: Date.now(),
+        } as IChatHistory,
+      })
+    }
   }
 
   return (
