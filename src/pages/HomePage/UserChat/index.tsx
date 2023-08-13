@@ -8,34 +8,56 @@ import {
   Videocam,
 } from "@mui/icons-material"
 import { IconButton, OutlinedInput } from "@mui/material"
+import { arrayUnion, doc, onSnapshot, updateDoc } from "firebase/firestore"
 import { useContext, useEffect, useState } from "react"
+import { v4 as uuid } from "uuid"
 import ChatMessage from "../../../components/ChatMessages"
 import NameBlock from "../../../components/NameBlock"
-import { ChatContext } from "../../../context/chatContext/chatContext"
-import "./styles.scss"
-import { Timestamp, arrayUnion, doc, updateDoc } from "firebase/firestore"
-import { db } from "../../../firebase"
-import { v4 as uuid } from "uuid"
-import { AuthenticationContext } from "../../../context/authenticationContext"
 import { IChatHistory } from "../../../components/SideMenu"
+import { AuthenticationContext } from "../../../context/authenticationContext"
+import { ChatContext } from "../../../context/chatContext/chatContext"
+import { db } from "../../../firebase"
+import "./styles.scss"
+
+interface IConversationData {
+  messages: IChatMessage[]
+}
+
+export interface IChatMessage {
+  id: string
+  message: string
+  senderId: string
+  date: any
+}
 
 const UserChat: React.FC = (): React.ReactElement => {
   const { user } = useContext(AuthenticationContext)
   const { currentChat } = useContext(ChatContext)
   const [message, setMessage] = useState<string>("")
-  const [messages, setMessages] = useState<string[]>([])
+  const [messages, setMessages] = useState<IChatMessage[]>([])
 
-  useEffect(() => {}, [])
+  useEffect(() => {
+    if (!currentChat.chatId) return
+    const conversationRef = doc(db, "conversations", currentChat.chatId)
+    const unSub = onSnapshot(conversationRef, (messages) => {
+      if (!messages.exists()) return
+      const data = messages.data() as IConversationData
+      setMessages(data.messages.reverse())
+    })
+    return () => {
+      unSub()
+    }
+  }, [currentChat.chatId])
 
   const handleSend = async () => {
     if (!currentChat.selectedUser?.id || !user?.uid) return
-    const conversionRef = doc(db, "conversations", currentChat.chatId)
-    await updateDoc(conversionRef, {
+    const conversationRef = doc(db, "conversations", currentChat.chatId)
+    await updateDoc(conversationRef, {
       messages: arrayUnion({
         id: uuid(),
         message: message,
         senderId: user.uid,
-        date: Timestamp.now(),
+        date: Date.now(),
       }),
     })
 
@@ -80,7 +102,7 @@ const UserChat: React.FC = (): React.ReactElement => {
           </div>
           <div className="chat-area">
             {messages.map((m) => (
-              <ChatMessage message={m} />
+              <ChatMessage info={m} />
             ))}
           </div>
 

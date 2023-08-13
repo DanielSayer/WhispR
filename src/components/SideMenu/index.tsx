@@ -11,6 +11,7 @@ import {
   doc,
   getDoc,
   getDocs,
+  onSnapshot,
   query,
   setDoc,
   updateDoc,
@@ -39,12 +40,11 @@ const SideMenu: React.FC = (): React.ReactElement => {
   const [isLoading, setIsLoading] = useState<boolean>(false)
 
   useEffect(() => {
-    const loadUserChatHistory = async () => {
+    const userDocRef = doc(db, "chatHistory", user!.uid)
+    const unSub = onSnapshot(userDocRef, (user) => {
       let previousUserHistory: IChatHistory[] = []
-      const userDocRef = doc(db, "chatHistory", user!.uid)
-      const response = await getDoc(userDocRef)
-      if (!response.exists()) return
-      const data: Record<string, IChatHistory> = response.data()
+      if (!user.exists()) return
+      const data: Record<string, IChatHistory> = user.data()
       Object.keys(data).forEach((id) => {
         const chatHistory: IChatHistory = data[id]
         previousUserHistory.push(chatHistory)
@@ -52,9 +52,10 @@ const SideMenu: React.FC = (): React.ReactElement => {
 
       previousUserHistory.sort((a, b) => b.timestamp - a.timestamp)
       setChatHistory(previousUserHistory)
+    })
+    return () => {
+      unSub()
     }
-    if (!user) return
-    loadUserChatHistory()
   }, [])
 
   const [search, setSearch] = useState<string>("")
