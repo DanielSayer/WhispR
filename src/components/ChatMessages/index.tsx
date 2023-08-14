@@ -1,10 +1,14 @@
 import { Avatar, Typography } from "@mui/material"
-import { stringAvatar } from "../../utils/helperMethods/generateAvatar"
-import "./styles.scss"
-import { IChatMessage } from "../../pages/HomePage/UserChat"
 import { useContext } from "react"
 import { AuthenticationContext } from "../../context/authenticationContext"
 import { ChatContext } from "../../context/chatContext/chatContext"
+import { IChatMessage } from "../../pages/HomePage/UserChat"
+import { stringAvatar } from "../../utils/helperMethods/generateAvatar"
+import {
+  generateTimeElapsed,
+  timeToMessage,
+} from "../../utils/helperMethods/timeUtils"
+import "./styles.scss"
 
 interface IMessageProps {
   info: IChatMessage
@@ -22,17 +26,24 @@ const ChatMessage: React.FC<IMessageProps> = ({ info }): React.ReactElement => {
     return currentChat.selectedUser.username
   }
 
+  const getTimeStamp = (): string => {
+    const time = generateTimeElapsed(info.date)
+    return timeToMessage(time)
+  }
+
   return (
     <div
       key={info.id}
       className={`message ${info.senderId === user?.uid ? "self" : ""}`}
     >
-      <div className="message-info">
+      <div className="avatar-content">
         <Avatar {...stringAvatar(getAvatar())} />
-        <Typography component="p">just now</Typography>
+        <Typography className="message-content" variant="body2">
+          {info.message}
+        </Typography>
       </div>
-      <Typography className="message-content" variant="body2">
-        {info.message}
+      <Typography component="p" className="timestamp">
+        {getTimeStamp()}
       </Typography>
     </div>
   )

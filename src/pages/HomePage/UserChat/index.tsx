@@ -27,7 +27,7 @@ export interface IChatMessage {
   id: string
   message: string
   senderId: string
-  date: any
+  date: number
 }
 
 const UserChat: React.FC = (): React.ReactElement => {
@@ -49,13 +49,13 @@ const UserChat: React.FC = (): React.ReactElement => {
     }
   }, [currentChat.chatId])
 
-  const handleSend = async () => {
+  const handleSend = async (emoji?: string) => {
     if (!currentChat.selectedUser?.id || !user?.uid) return
     const conversationRef = doc(db, "conversations", currentChat.chatId)
     await updateDoc(conversationRef, {
       messages: arrayUnion({
         id: uuid(),
-        message: message,
+        message: emoji ?? message,
         senderId: user.uid,
         date: Date.now(),
       }),
@@ -102,7 +102,7 @@ const UserChat: React.FC = (): React.ReactElement => {
           </div>
           <div className="chat-area">
             {messages.map((m) => (
-              <ChatMessage info={m} />
+              <ChatMessage info={m} key={m.id} />
             ))}
           </div>
 
@@ -116,11 +116,11 @@ const UserChat: React.FC = (): React.ReactElement => {
               onChange={(e) => setMessage(e.currentTarget.value)}
             />
             {message === "" ? (
-              <IconButton>
+              <IconButton onClick={() => handleSend("👍")}>
                 <ThumbUp />
               </IconButton>
             ) : (
-              <IconButton aria-label="send" onClick={handleSend}>
+              <IconButton aria-label="send" onClick={() => handleSend()}>
                 <Send />
               </IconButton>
             )}
