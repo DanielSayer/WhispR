@@ -51,21 +51,21 @@ const UserChat: React.FC = (): React.ReactElement => {
 
   const handleSend = async (emoji?: string) => {
     if (!currentChat.selectedUser?.id || !user?.uid) return
+    const messageToSend = emoji ?? message
+    setMessage("")
     const conversationRef = doc(db, "conversations", currentChat.chatId)
     await updateDoc(conversationRef, {
       messages: arrayUnion({
         id: uuid(),
-        message: emoji ?? message,
+        message: messageToSend,
         senderId: user.uid,
         date: Date.now(),
       }),
     })
 
-    setMessage("")
-
     const chatHistoryRef = doc(db, "chatHistory", user.uid)
     await updateDoc(chatHistoryRef, {
-      [`${currentChat.chatId}.lastMessage`]: message,
+      [`${currentChat.chatId}.lastMessage`]: messageToSend,
       [`${currentChat.chatId}.timestamp`]: Date.now(),
     })
     const receiverHistoryRef = doc(
@@ -77,7 +77,7 @@ const UserChat: React.FC = (): React.ReactElement => {
       [`${currentChat.chatId}`]: {
         id: user.uid,
         username: user.displayName,
-        lastMessage: message,
+        lastMessage: messageToSend,
         hasSeen: false,
         timestamp: Date.now(),
       } as IChatHistory,
