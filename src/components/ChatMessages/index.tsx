@@ -1,4 +1,4 @@
-import { Avatar, Typography } from "@mui/material"
+import { Avatar, Tooltip, Typography } from "@mui/material"
 import { useContext } from "react"
 import { AuthenticationContext } from "../../context/authenticationContext"
 import { ChatContext } from "../../context/chatContext/chatContext"
@@ -36,15 +36,12 @@ const ChatMessage: React.FC<IMessageProps> = ({ info }): React.ReactElement => {
       key={info.id}
       className={`message ${info.senderId === user?.uid ? "self" : ""}`}
     >
-      <div className="avatar-content">
-        <Avatar {...stringAvatar(getAvatar())} />
+      <Avatar {...stringAvatar(getAvatar())} />
+      <Tooltip title={getTimeStamp()} arrow enterDelay={1000}>
         <Typography className="message-content" variant="body2">
           {info.message}
         </Typography>
-      </div>
-      <Typography component="p" className="timestamp">
-        {getTimeStamp()}
-      </Typography>
+      </Tooltip>
     </div>
   )
 }
