@@ -1,5 +1,5 @@
 import { Avatar, Tooltip, Typography } from "@mui/material"
-import { useContext } from "react"
+import { useContext, useState } from "react"
 import { AuthenticationContext } from "../../context/authenticationContext"
 import { ChatContext } from "../../context/chatContext/chatContext"
 import { IChatMessage } from "../../pages/HomePage/UserChat"
@@ -17,6 +17,7 @@ interface IMessageProps {
 const ChatMessage: React.FC<IMessageProps> = ({ info }): React.ReactElement => {
   const { user } = useContext(AuthenticationContext)
   const { currentChat } = useContext(ChatContext)
+  const [tooltipContent, setTooltipContent] = useState<string>("")
 
   const getAvatar = (): string => {
     if (!user || !currentChat.selectedUser) return ""
@@ -37,7 +38,13 @@ const ChatMessage: React.FC<IMessageProps> = ({ info }): React.ReactElement => {
       className={`message ${info.senderId === user?.uid ? "self" : ""}`}
     >
       <Avatar {...stringAvatar(getAvatar())} />
-      <Tooltip title={getTimeStamp()} arrow enterDelay={1000}>
+      <Tooltip
+        title={tooltipContent}
+        arrow
+        enterDelay={1000}
+        onOpen={() => setTooltipContent(getTimeStamp())}
+        onClose={() => setTooltipContent("")}
+      >
         <Typography className="message-content" variant="body2">
           {info.message}
         </Typography>
