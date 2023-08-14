@@ -1,9 +1,9 @@
-import UserChat from "./UserChat"
-import Header from "../../components/Header"
-import SideMenu from "../../components/SideMenu"
-import "./styles.scss"
 import { useContext } from "react"
+import Header from "../../components/Header"
 import { AuthenticationContext } from "../../context/authenticationContext"
+import SideMenu from "./SideMenu"
+import UserChat from "./UserChat"
+import "./styles.scss"
 
 const HomePage: React.FC = (): React.ReactElement => {
   const { user } = useContext(AuthenticationContext)

@@ -18,12 +18,12 @@ import {
   where,
 } from "firebase/firestore"
 import { useContext, useEffect, useState } from "react"
-import { AuthenticationContext } from "../../context/authenticationContext"
-import { db } from "../../firebase"
-import RecentChat from "../RecentChat"
+import RecentChat from "../../../components/RecentChat"
+import { AuthenticationContext } from "../../../context/authenticationContext"
+import { ChatContext } from "../../../context/chatContext/chatContext"
+import { db } from "../../../firebase"
+import { generateCombinedId } from "../../../utils/helperMethods/generateId"
 import "./styles.scss"
-import { ChatContext } from "../../context/chatContext/chatContext"
-import { generateCombinedId } from "../../utils/helperMethods/generateId"
 
 export interface IChatHistory {
   id: string
@@ -82,18 +82,8 @@ const SideMenu: React.FC = (): React.ReactElement => {
     setIsLoading(false)
   }
 
-  //This might need to be changed. So that the timestamp is created on message send rather than user clicked
   const handleSelectUser = async (id: string, username: string) => {
-    const chatUserLocation = chatHistory.findIndex((c) => c.id === id)
-    if (chatUserLocation === -1) return
-    const updatedHistory = [
-      chatHistory[chatUserLocation],
-      ...chatHistory.slice(0, chatUserLocation),
-      ...chatHistory.slice(chatUserLocation + 1),
-    ]
-    setChatHistory(updatedHistory)
     dispatch({ type: "CHANGE_USER", payload: { id: id, username: username } })
-
     const conversationId = generateCombinedId(user?.uid!, id)
 
     const response = await getDoc(doc(db, "conversations", conversationId))
