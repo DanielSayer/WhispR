@@ -5,12 +5,15 @@ import "./styles.scss"
 import { Logout } from "@mui/icons-material"
 import { signOut } from "firebase/auth"
 import { auth } from "../../firebase"
+import { useNavigate } from "react-router-dom"
+import AppRoutes from "../../appRoutes"
 
 interface IHeaderProps {
   name: string
 }
 
 const Header: React.FC<IHeaderProps> = ({ name }): React.ReactElement => {
+  const navigate = useNavigate()
   const handleSignOut = () => {
     signOut(auth)
   }
@@ -22,7 +25,12 @@ const Header: React.FC<IHeaderProps> = ({ name }): React.ReactElement => {
         <div onClick={handleSignOut}>
           <Logout className="icon" />
         </div>
-        <Avatar {...stringAvatar(name)} />
+        <div
+          className="cursor-pointer"
+          onClick={() => navigate(AppRoutes.getEditProfilePage())}
+        >
+          <Avatar {...stringAvatar(name)} />
+        </div>
       </div>
     </div>
   )

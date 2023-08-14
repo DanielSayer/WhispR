@@ -5,13 +5,14 @@ import { AuthenticationContext } from "./context/authenticationContext"
 import HomePage from "./pages/HomePage"
 import LoginPage from "./pages/LoginSignUp/LoginPage"
 import SignUpPage from "./pages/LoginSignUp/SignUpPage"
+import EditProfilePage from "./pages/EditProfile"
 
 interface IProtectedRouteProps {
   children: React.ReactNode
 }
 
 const App: React.FC = (): React.ReactElement => {
-  const { loginPage, signUpPage, homePage } = AppRoutes
+  const { loginPage, signUpPage, homePage, editProfilePage } = AppRoutes
   const { user, authChecked } = useContext(AuthenticationContext)
 
   const ProtectedRoute: React.FC<IProtectedRouteProps> = ({
@@ -38,10 +39,18 @@ const App: React.FC = (): React.ReactElement => {
             </ProtectedRoute>
           }
         />
+        <Route
+          path={editProfilePage}
+          element={
+            <ProtectedRoute>
+              <EditProfilePage />
+            </ProtectedRoute>
+          }
+        />
 
         <Route
           path={"*"}
-          element={<Navigate to={AppRoutes.getSignUpPage()} replace />}
+          element={<Navigate to={AppRoutes.getHomePage()} replace />}
         />
       </Routes>
     </BrowserRouter>
