@@ -38,7 +38,7 @@ export const generateTimeElapsed = (time: number): TimeDuration => {
 }
 
 export const timeToMessage = (time: TimeDuration): string => {
-  if (time.weeks > 1) return "Over a week ago"
+  if (time.weeks >= 1) return "Over a week ago"
   if (time.days > 1) return `${time.days} days ago`
   if (time.days === 1) return "Yesterday"
   if (time.hours > 1) return `${time.hours} hours ago`

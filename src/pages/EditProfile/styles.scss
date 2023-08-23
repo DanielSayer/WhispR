@@ -16,17 +16,19 @@
     gap: 0;
   }
 
-  .side-menu {
-    border-right: 1px solid rgba($raisin-black, 0.5);
+  .page-content {
     height: inherit;
     display: flex;
-    flex-direction: column;
-    padding: 0.5rem 0.5rem 0 0.5rem;
 
-    .home-button {
-      margin-top: auto;
-      margin-left: auto;
-      opacity: 0.8;
+    .side-menu {
+      border-right: 1px solid rgba($raisin-black, 0.5);
+      flex-direction: column;
+      padding: 0.5rem 0.5rem 0 0;
+    }
+
+    .menu-option {
+      flex: 1;
+      padding: 1rem;
     }
   }
 }
