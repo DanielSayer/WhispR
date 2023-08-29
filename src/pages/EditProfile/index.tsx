@@ -53,6 +53,29 @@ const EditProfilePage: React.FC = (): React.ReactElement => {
     }
   }
 
+  const menu = [
+    {
+      name: "Account",
+      icon: <Person />,
+    },
+    {
+      name: "Privacy and Security",
+      icon: <Shield />,
+    },
+    {
+      name: "Chat Settings",
+      icon: <Settings />,
+    },
+    {
+      name: "Help and Support",
+      icon: <Chat />,
+    },
+    {
+      name: "About",
+      icon: <Info />,
+    },
+  ]
+
   return (
     <div className="app">
       <Header name={name} />
@@ -75,46 +98,16 @@ const EditProfilePage: React.FC = (): React.ReactElement => {
           <div className="page-content">
             <div className="side-menu">
               <List>
-                <ListItem disablePadding>
-                  <ListItemButton>
-                    <ListItemIcon>
-                      <Person />
-                    </ListItemIcon>
-                    <ListItemText primary="Account" />
-                  </ListItemButton>
-                </ListItem>
-                <ListItem disablePadding>
-                  <ListItemButton>
-                    <ListItemIcon>
-                      <Shield />
-                    </ListItemIcon>
-                    <ListItemText primary="Privacy and Security" />
-                  </ListItemButton>
-                </ListItem>
-                <ListItem disablePadding>
-                  <ListItemButton>
-                    <ListItemIcon>
-                      <Settings />
-                    </ListItemIcon>
-                    <ListItemText primary="Chat Settings" />
-                  </ListItemButton>
-                </ListItem>
-                <ListItem disablePadding>
-                  <ListItemButton>
-                    <ListItemIcon>
-                      <Chat />
-                    </ListItemIcon>
-                    <ListItemText primary="Help and Support" />
-                  </ListItemButton>
-                </ListItem>
-                <ListItem disablePadding>
-                  <ListItemButton>
-                    <ListItemIcon>
-                      <Info />
-                    </ListItemIcon>
-                    <ListItemText primary="About" />
-                  </ListItemButton>
-                </ListItem>
+                {menu.map((x) => {
+                  return (
+                    <ListItem disablePadding>
+                      <ListItemButton>
+                        <ListItemIcon>{x.icon}</ListItemIcon>
+                        <ListItemText primary={x.name} />
+                      </ListItemButton>
+                    </ListItem>
+                  )
+                })}
               </List>
             </div>
             <div className="menu-option">
